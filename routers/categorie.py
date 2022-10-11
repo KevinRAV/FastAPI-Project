@@ -4,7 +4,7 @@ router = APIRouter()
 
 
 @router.get("/categorie")
-def get_categorie(categorie_id: str, name: str):
-    categorie = {"id": categorie_id, "name": name}
+def get_categorie(search: str = "", sort: str = ""):
+    categorie = {"searching": search, "sorting": sort}
     return categorie
 
