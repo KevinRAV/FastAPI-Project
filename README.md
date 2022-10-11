@@ -28,7 +28,7 @@
 
 ### 2) Navigation
 
-#### GET /articles/all
+#### GET /products/all
 **request body**: {}
 <br>
 **queries**: {
@@ -41,7 +41,7 @@
 }<br>
 *return articles: list[Article]*
 
-#### GET /articles/{id}
+#### GET /products/{id}
 **params**: {
 <br>&nbsp;
     id: int
