@@ -21,20 +21,42 @@
 }
 *return auth_token: str*
 
-#### GET /users/{id}
+#### GET /users
+**request body**: {
+&nbsp;auth_token: str
+}
+*return active_user: User*
 
 #### GET /commands
+**request body**: {
+&nbsp;auth_token: str
+}
+**queries**: {
+&nbsp;filter ( product_name = str, date > = < str ),
+&nbsp;sort ( product_name: str, date: str, seller: int ),
+&nbsp; **pagination** ( pagesize: int, page: int )
+}
+*return buy_history: list[Command]*
 
 #### GET /commands/{user_id}
+**request body**: {
+&nbsp;auth_token: str
+}
+**queries**: {
+&nbsp;filter ( product_name = str, date > = < str ),
+&nbsp;sort ( product_name: str, date: str, seller: int ),
+&nbsp; **pagination** ( pagesize: int, page: int )
+}
+*return sells_history: list[Command]*
 
 ### &nbsp; 2) Browsing
 
 #### GET /products
 **request body**: {}
 **queries**: {
-&nbsp; **filter** ( category = str, seller = int, name = str, price > = < float )
-&nbsp; **sort** ( id: int, price: int, name: str, category: str )
-&nbsp; **pagination** ( itemsperpage: int, page: int )
+&nbsp; **filter** ( category = str, seller = int, name = str, price > = < float ),
+&nbsp; **sort** ( id: int, price: int, name: str, category: str ),
+&nbsp; **pagination** ( pagesize: int, page: int )
 }
 *return articles: list[Article]*
 
@@ -87,13 +109,51 @@
 ### &nbsp; 4) Selling
 
 #### POST /products
+**request body**: {
+&nbsp;auth_token: str,
+&nbsp;product_name: str,
+&nbsp;price: int,
+&nbsp;category: int,
+&nbsp;description: str,
+&nbsp;stock: int,
+&nbsp;image: str,
+}
+*return new_product: Product
 
 #### PUT /products/{id}
+**request body**: {
+&nbsp;auth_token: str,
+&nbsp;product_name: str,
+&nbsp;price: int,
+&nbsp;category: int,
+&nbsp;description: str,
+&nbsp;stock: int,
+&nbsp;image: str,
+}
+*return updated_product: Product
 
 #### DELETE /products/{id}
+**request body**: {
+&nbsp;auth_token: str
+}
+*return deleted_product: Product
 
 ### &nbsp; 5) Admin
 
 #### POST /auth/admin
+**request body**: {
+&nbsp; mail: str
+&nbsp; name: str
+&nbsp; password: str
+}
+*return auth_token: str*
 
 #### DELETE /comments/{product_id}/{user_id}
+**params**: {
+&nbsp;product_id: int,
+&nbsp;user_id: int,
+}
+**request body**: {
+&nbsp;auth_token: str
+}
+*return deleted_comment: Comment
