@@ -26,6 +26,8 @@
 
 *return auth_token: str*
 
+<br>
+
 * #### POST /auth/login
 **params**: { }
 
@@ -39,6 +41,8 @@
 
 *return auth_token: str*
 
+<br>
+
 * #### GET /users
 **request body**: {
 
@@ -47,6 +51,8 @@
 }
 
 *return active_user: User*
+
+<br>
 
 * #### GET /commands
 **request body**: {
@@ -67,6 +73,8 @@
 
 *return buy_history: list[Command]*
 
+<br>
+
 * #### GET /commands/{user_id}
 **request body**: {
 
@@ -85,6 +93,8 @@
 }
 
 *return sells_history: list[Command]*
+
+<br>
 
 ### &nbsp; 2) Browsing
 
@@ -107,6 +117,8 @@
 
 *return products: list[Product]*
 
+<br>
+
 * #### GET /products/{id}
 **params**: {
 
@@ -124,6 +136,8 @@
 
 *return products: Product **or** list[Product.fields]*
 
+<br>
+
 * #### GET /categories
 **params**: { }
 
@@ -139,6 +153,8 @@
 
 *return categories: list[Category]*
 
+<br>
+
 * #### GET /categories/{id}
 **params**: {
 
@@ -151,6 +167,8 @@
 **queries**: { }
 
 *return categorie: Category*
+
+<br>
 
 * #### GET /comments/{product_id}
 **params**: {
@@ -173,6 +191,8 @@
 
 *return comments: list[Comment]*
 
+<br>
+
 * #### PUT /comments/{product_id}
 **params**: {
 
@@ -193,6 +213,8 @@
 **queries**: { }
 
 *return updated_comment: Comment*
+
+<br>
 
 * #### POST /comments/{product_id}
 **params**: {
@@ -215,6 +237,8 @@
 
 *return new_comment: Comment*
 
+<br>
+
 * #### DELETE /comments/{product_id}
 **params**: {
 
@@ -231,6 +255,8 @@
 **queries**: { }
 
 *return deleted_comment: Comment*
+
+<br>
 
 ### &nbsp; 3) Cart
 
@@ -249,6 +275,8 @@
 
 *return carts: list[Cart]*
 
+<br>
+
 
 * #### DELETE /carts
 **params**: { }
@@ -262,6 +290,8 @@
 **queries**: { }
 
 *return deleted_carts: list[Cart]*
+
+<br>
 
 * #### PATCH /carts/{product_id}
 **params**: {
@@ -282,6 +312,8 @@
 
 *return carts: Cart*
 
+<br>
+
 * #### POST /carts
 **params**: { }
 
@@ -299,6 +331,8 @@
 
 *return carts: Cart*
 
+<br>
+
 * #### DELETE /carts/{product_id}
 **params**: {
 
@@ -315,6 +349,8 @@
 **queries**: { }
 
 *return carts: Cart*
+
+<br>
 
 * #### POST /commands
 **params**: { }
@@ -355,6 +391,8 @@
 
 *return new_product: Product*
 
+<br>
+
 * #### PUT /products/{id}
 
 **request body**: {
@@ -377,6 +415,8 @@
 
 *return updated_product: Product*
 
+<br>
+
 * #### DELETE /products/{id}
 
 **request body**: {
@@ -386,6 +426,8 @@
 }
 
 *return deleted_product: Product*
+
+<br>
 
 ### &nbsp; 5) Admin
 
@@ -405,6 +447,8 @@
 
 *return auth_token: str*
 
+<br>
+
 * #### DELETE /comments/{product_id}/{user_id}
 
 **params**: {
@@ -422,3 +466,5 @@
 }
 
 *return deleted_comment: Comment*
+
+<br>
