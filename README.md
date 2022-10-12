@@ -1,76 +1,99 @@
 # Leboncoing (online marketplace)'s API.
 
+---
+
 ```uvicorn main:app --reload``` in terminal to run on ```localhost:8000```
 
 ## End Points (24)
-
----
 
 ### &nbsp; 1) Profile
 
 ---
  
-#### POST /auth/signup
+* #### POST /auth/signup
+
 **params**: { }
 
 **request body**: {
+
 &nbsp; mail: str
+
 &nbsp; name: str
+
 &nbsp; password: str
+
 }
+
 *return auth_token: str*
 
-#### POST /auth/login
+* #### POST /auth/login
 **params**: { }
 
 **request body**: {
+
 &nbsp; mail: str
+
 &nbsp; password: str
+
 }
+
 *return auth_token: str*
 
-#### GET /users
+* #### GET /users
 **request body**: {
-&nbsp;auth_token: str
+
+&nbsp; auth_token: str
+
 }
+
 *return active_user: User*
 
-#### GET /commands
+* #### GET /commands
 **request body**: {
-&nbsp;auth_token: str
+
+&nbsp; auth_token: str
+
 }
+
 **queries**: {
-&nbsp;filter ( product_name = str, date > = < str ),
-&nbsp;sort ( product_name: str, date: str, seller: int ),
+
+&nbsp; filter ( product_name = str, date > = < str ),
+
+&nbsp; sort ( product_name: str, date: str, seller: int ),
+
 &nbsp; **pagination** ( pagesize: int, page: int )
+
 }
+
 *return buy_history: list[Command]*
 
-#### GET /commands/{user_id}
+* #### GET /commands/{user_id}
 **request body**: {
-&nbsp;auth_token: str
+
+&nbsp; auth_token: str
+
 }
+
 **queries**: {
-&nbsp;filter ( product_name = str, date > = < str ),
-&nbsp;sort ( product_name: str, date: str, seller: int ),
+
+&nbsp; filter ( product_name = str, date > = < str ),
+
+&nbsp; sort ( product_name: str, date: str, seller: int ),
+
 &nbsp; **pagination** ( pagesize: int, page: int )
+
 }
+
 *return sells_history: list[Command]*
-
-
-
-
-
-
 
 ### &nbsp; 2) Browsing
 
 ---
 
-#### GET /products
-**request body**: {}
+* #### GET /products
+**request body**: { }
 
-**params**: {}
+**params**: { }
 
 **queries**: {
 
@@ -84,14 +107,14 @@
 
 *return products: list[Product]*
 
-#### GET /products/{id}
+* #### GET /products/{id}
 **params**: {
 
 &nbsp; id: int
 
 }
 
-**request body**: {}
+**request body**: { }
 
 **queries**: {
 
@@ -101,10 +124,10 @@
 
 *return products: Product **or** list[Product.fields]*
 
-#### GET /categories
-**params**: {}
+* #### GET /categories
+**params**: { }
 
-**request body**: {}
+**request body**: { }
 
 **queries**: {
 
@@ -116,27 +139,27 @@
 
 *return categories: list[Category]*
 
-#### GET /categories/{id}
+* #### GET /categories/{id}
 **params**: {
 
 &nbsp; id: int
 
 }
 
-**request body**: {}
+**request body**: { }
 
 **queries**: { }
 
 *return categorie: Category*
 
-#### GET /comments/{product_id}
+* #### GET /comments/{product_id}
 **params**: {
 
 &nbsp; product_id: int
 
 }
 
-**request body**: {}
+**request body**: { }
 
 **queries**: {
 
@@ -150,7 +173,7 @@
 
 *return comments: list[Comment]*
 
-#### PUT /comments/{product_id}
+* #### PUT /comments/{product_id}
 **params**: {
 
 &nbsp; product_id: int
@@ -167,11 +190,11 @@
 
 }
 
-**queries**: {}
+**queries**: { }
 
 *return updated_comment: Comment*
 
-#### POST /comments/{product_id}
+* #### POST /comments/{product_id}
 **params**: {
 
 &nbsp; product_id: int
@@ -192,7 +215,7 @@
 
 *return new_comment: Comment*
 
-#### DELETE /comments/{product_id}
+* #### DELETE /comments/{product_id}
 **params**: {
 
 &nbsp; product_id: int
@@ -213,7 +236,7 @@
 
 ---
 
-#### GET /carts
+* #### GET /carts
 **params**: { }
 
 **request body**: {
@@ -227,7 +250,7 @@
 *return carts: list[Cart]*
 
 
-#### DELETE /carts
+* #### DELETE /carts
 **params**: { }
 
 **request body**: {
@@ -236,11 +259,11 @@
 
 }
 
-**queries**: {}
+**queries**: { }
 
 *return deleted_carts: list[Cart]*
 
-#### PATCH /carts/{product_id}
+* #### PATCH /carts/{product_id}
 **params**: {
 
 &nbsp; product_id: int
@@ -259,7 +282,7 @@
 
 *return carts: Cart*
 
-#### POST /carts
+* #### POST /carts
 **params**: { }
 
 **request body**: {
@@ -272,11 +295,11 @@
 
 }
 
-**queries**: {}
+**queries**: { }
 
 *return carts: Cart*
 
-#### DELETE /carts/{product_id}
+* #### DELETE /carts/{product_id}
 **params**: {
 
 &nbsp; product_id: int
@@ -293,7 +316,7 @@
 
 *return carts: Cart*
 
-#### POST /commands
+* #### POST /commands
 **params**: { }
 
 **request body**: {
@@ -310,54 +333,92 @@
 
 ---
 
-#### POST /products
-**request body**: {
-&nbsp;auth_token: str,
-&nbsp;product_name: str,
-&nbsp;price: int,
-&nbsp;category: int,
-&nbsp;description: str,
-&nbsp;stock: int,
-&nbsp;image: str,
-}
-*return new_product: Product
+* #### POST /products
 
-#### PUT /products/{id}
 **request body**: {
-&nbsp;auth_token: str,
-&nbsp;product_name: str,
-&nbsp;price: int,
-&nbsp;category: int,
-&nbsp;description: str,
-&nbsp;stock: int,
-&nbsp;image: str,
-}
-*return updated_product: Product
 
-#### DELETE /products/{id}
+&nbsp; auth_token: str,
+
+&nbsp; product_name: str,
+
+&nbsp; price: int,
+
+&nbsp; category: int,
+
+&nbsp; description: str,
+
+&nbsp; stock: int,
+
+&nbsp; image: str,
+
+}
+
+*return new_product: Product*
+
+* #### PUT /products/{id}
+
 **request body**: {
+
+&nbsp; auth_token: str,
+
+&nbsp; product_name: str,
+
+&nbsp; price: int,
+
+&nbsp; category: int,
+
+&nbsp; description: str,
+
+&nbsp; stock: int,
+
+&nbsp; image: str,
+
+}
+
+*return updated_product: Product*
+
+* #### DELETE /products/{id}
+
+**request body**: {
+
 &nbsp;auth_token: str
+
 }
-*return deleted_product: Product
+
+*return deleted_product: Product*
 
 ### &nbsp; 5) Admin
 
 ---
 
-#### POST /auth/admin
+* #### POST /auth/admin
+
 **request body**: {
+
 &nbsp; mail: str
+
 &nbsp; name: str
+
 &nbsp; password: str
+
 }
+
 *return auth_token: str*
 
-#### DELETE /comments/{product_id}/{user_id}
+* #### DELETE /comments/{product_id}/{user_id}
+
 **params**: {
-&nbsp;product_id: int,
-&nbsp;user_id: int,
+
+&nbsp; product_id: int
+
+&nbsp; user_id: int
+
 }
+
 **request body**: {
-&nbsp;auth_token: str
+
+&nbsp; auth_token: str
+
 }
-*return deleted_comment: Comment
+
+*return deleted_comment: Comment*
