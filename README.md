@@ -2,63 +2,98 @@
 
 ```uvicorn main:app --reload``` in terminal to run on ```localhost:8000```
 
-## End Points
+## End Points (24)
 
-### 1) Authentification
+### &nbsp; 1) Profile
  
 #### POST /auth/signup
 **request body**: {
-<br>
 &nbsp; mail: str
-<br> &nbsp; nom: str
-<br> &nbsp; mdp: str
-<br>}
-<br>
+&nbsp; name: str
+&nbsp; password: str
+}
 *return auth_token: str*
 
 #### POST /auth/login
 **request body**: {
-<br>
 &nbsp; mail: str
-<br> &nbsp; mdp: str
-<br>
+&nbsp; password: str
 }
-<br>
 *return auth_token: str*
 
-### 2) Navigation
+#### GET /users/{id}
 
-#### GET /products/all
+#### GET /commands
+
+#### GET /commands/{user_id}
+
+### &nbsp; 2) Browsing
+
+#### GET /products
 **request body**: {}
-<br>
 **queries**: {
-<br>&nbsp;
-    **filter** ( category = str, name = str, price > = < float )
-<br>&nbsp;
-    **sort** ( id: int, price: int, name: str, category: str )
-<br>&nbsp;
-    **pagination** ( itemsperpage: int, page: int )<br>
-}<br>
+&nbsp; **filter** ( category = str, seller = int, name = str, price > = < float )
+&nbsp; **sort** ( id: int, price: int, name: str, category: str )
+&nbsp; **pagination** ( itemsperpage: int, page: int )
+}
 *return articles: list[Article]*
 
 #### GET /products/{id}
 **params**: {
-<br>&nbsp;
-    id: int
-<br>}<br>
+&nbsp; id: int
+}
 **request body**: {}
-<br>
 **queries**: {
-<br>&nbsp; 
-    **filter** ( fields = [Enum] )
-<br>}<br>
-*return articles: Article **or** list[Article.fields]* 
+&nbsp; **filter** ( fields = [Enum] )
+}
+*return articles: Article **or** list[Article.fields]*
 
 #### GET /categories
 **request body**: {}
-<br>
 **queries**: {
-<br>&nbsp; 
-    **filter** ( name = str)
-<br>}<br>
-*return categories: list[Category]* 
+&nbsp; **filter** ( name = str)
+}
+*return categories: list[Category]*
+
+#### GET /categories/{id}
+
+#### GET /comments/{product_id}
+
+#### PUT /comments/{product_id}
+
+#### POST /comments/{product_id}
+
+#### DELETE /comments/{product_id}
+
+### &nbsp; 3) Cart
+
+#### GET /carts
+**request body**: {}
+**queries**: {
+&nbsp; **filter** ( owner = str, )
+}
+*return basket: list[Articles]*
+
+#### DELETE /carts
+
+#### PATCH /carts/{product_id}
+
+#### POST /carts/{product_id}
+
+#### DELETE /carts/{product_id}
+
+#### POST /commands
+
+### &nbsp; 4) Selling
+
+#### POST /products
+
+#### PUT /products/{id}
+
+#### DELETE /products/{id}
+
+### &nbsp; 5) Admin
+
+#### POST /auth/admin
+
+#### DELETE /comments/{product_id}/{user_id}
