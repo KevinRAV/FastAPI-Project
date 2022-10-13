@@ -1,5 +1,7 @@
 from pydantic import BaseModel
 
+from models import Category
+
 
 class ProductBase(BaseModel):
     name: str
@@ -10,6 +12,14 @@ class ProductBase(BaseModel):
 
 
 class ProductCreate(ProductBase):
+    pass
+
+
+class ProductDelete(ProductBase):
+    pass
+
+
+class ProductUpdate(ProductBase):
     pass
 
 
