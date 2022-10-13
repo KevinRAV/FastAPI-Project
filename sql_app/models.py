@@ -1,7 +1,7 @@
 from datetime import datetime
-
+import pip._internal.utils
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Float, DateTime
-from sqlalchemy.orm import relationship, foreign
+from sqlalchemy.orm import relationship
 
 from .database import Base
 
@@ -23,9 +23,9 @@ class User(Base):
 
 
 class Product(Base):
-    _tablename__ = "products"
+    __tablename__ = "products"
 
-    jd = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
     price = Column(Float, index=True)
     description = Column(String)
@@ -40,7 +40,7 @@ class Product(Base):
     comments = relationship("Comment", back_populates="product")
 
 class Category(Base):
-    _tablename__ = "categories"
+    __tablename__ = "categories"
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, unique=True, index=True)
@@ -48,7 +48,7 @@ class Category(Base):
     products = relationship("Product", back_populates="category")
 
 class Cart(Base):
-    _tablename__ = "carts"
+    __tablename__ = "carts"
 
     owner_id = Column(Integer, ForeignKey("users.id"), primary_key=True, index=True)
     product_id = Column(Integer, ForeignKey("products.id"), primary_key=True, index=True)
@@ -58,7 +58,7 @@ class Cart(Base):
     product = relationship("Product", back_populates="carts")
 
 class Comment(Base):
-    _tablename__ = "comments"
+    __tablename__ = "comments"
 
     author_id = Column(Integer, ForeignKey("users.id"), primary_key=True, index=True)
     product_id =  Column(Integer, ForeignKey("products.id"), primary_key=True, index=True)
@@ -69,7 +69,7 @@ class Comment(Base):
     product = relationship("Product", back_populates="comments")
 
 class Commands(Base):
-    _tablename__ = "commands"
+    __tablename__ = "commands"
 
     id = Column(Integer, primary_key=True, index=True)
     product_name = Column(String, index=True)
