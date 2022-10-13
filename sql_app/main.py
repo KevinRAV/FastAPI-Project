@@ -28,7 +28,7 @@ def get_db():
 
 # post un nouveau user
 
-@app.post("/users/", response_model=User)
+@app.post("/users", response_model=User)
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
     db_user = crud.get_user_by_email(db, email=user.email)
     if db_user:
@@ -38,7 +38,7 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)):
 
 # get tous les users sous forme de liste
 
-@app.get("/users/", response_model=list[User])
+@app.get("/users", response_model=list[User])
 def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     users = crud.get_users(db, skip=skip, limit=limit)
     return users
@@ -53,7 +53,7 @@ def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
 
 # get la liste de tous les produits
 
-@app.post("/categories/", response_model=Category)
+@app.post("/categories", response_model=Category)
 def create_categories(category: CategoryCreate, db: Session = Depends(get_db)):
     db_category = crud.get_category_name(db, name=category.name)
     if db_category:
@@ -61,7 +61,7 @@ def create_categories(category: CategoryCreate, db: Session = Depends(get_db)):
     return crud.create_category(db=db, category=category)
 
 
-@app.get("/categories/", response_model=list[Category])
+@app.get("/categories", response_model=list[Category])
 def read_categories(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     categories = crud.get_category(db, skip=skip, limit=limit)
     return categories
@@ -78,7 +78,7 @@ def read_categories_id(categorie_id: int, db: Session = Depends(get_db)):
 
 # Products
 
-@app.post("/products/{seller_id}/", response_model=Product)
+@app.post("/products/{seller_id}", response_model=Product)
 def create_seller_product(
         seller_id: int, product: ProductCreate, db: Session = Depends(get_db)):
     return crud.create_product(db=db, product=product, seller_id=seller_id)
@@ -93,3 +93,8 @@ def read_product(skip: int = 0, limit: int = 100, db: Session = Depends(get_db))
 @app.delete("/products/{id}")
 def delete_product(id: int, db: Session = Depends(get_db)):
     return crud.delete_product(db, id)
+
+
+@app.put("/products/{id}")
+def update_product(id: int, product: Product, db: Session = Depends(get_db)):
+    return crud.update_product(db, id, product)

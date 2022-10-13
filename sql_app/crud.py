@@ -77,3 +77,16 @@ def delete_product(db: Session, product_id: int) -> object:
     db.delete(product)
     db.commit()
     return product
+
+
+def update_product(db: Session, product_id: int, updated_product: Product):
+    legacy_product = db.query(models.Product).filter(models.Product.id == product_id).first()
+    legacy_product.name = updated_product.name
+    legacy_product.category_id = updated_product.category_id
+    legacy_product.description = updated_product.description
+    legacy_product.image = updated_product.image
+    legacy_product.stock = updated_product.stock
+    legacy_product.price = updated_product.price
+    db.commit()
+    db.refresh(legacy_product)
+    return legacy_product
