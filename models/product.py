@@ -1,13 +1,15 @@
+from __future__ import annotations
+
 from pydantic import BaseModel
 
-from models import category
+from models.category import Category
 
 
 class ProductBase(BaseModel):
     name: str
     price: float
-    description: str | None = None
-    image: str | None = None
+    description: str
+    image: str
     stock: int
 
 

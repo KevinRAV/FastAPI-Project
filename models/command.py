@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from pydantic.types import date
+from datetime import date
 
 
 class CommandBase(BaseModel):

@@ -1,9 +1,11 @@
+from __future__ import annotations
+
 from pydantic import BaseModel
 
 
 class CommentBase(BaseModel):
-    stars: int | None = None
-    message: str | None = None
+    stars: int
+    message: str
 
 
 class CommentCreate(CommentBase):
