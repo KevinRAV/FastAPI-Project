@@ -6,7 +6,7 @@ from sqlalchemy.orm import relationship
 from .database import Base
 
 
-class user(Base):
+class User(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True)
@@ -14,12 +14,6 @@ class user(Base):
     email = Column(String, unique=True, index=True)
     hashed_password = Column(String)
     is_admin = Column(Boolean, default=False)
-
-    products = relationship("Product", back_populates="seller")
-    carts = relationship("Cart", back_populates="owner")
-    comments = relationship("Comment", back_populates="author")
-    commands = relationship("Command", back_populates="buyer")
-    commands = relationship("Command", back_populates="seller")
 
 
 class Product(Base):
@@ -34,10 +28,6 @@ class Product(Base):
     category_id = Column(Integer, ForeignKey("categories.id"))
     seller_id = Column(Integer, ForeignKey("users.id"))
 
-    seller = relationship("User", back_populates="products")
-    category = relationship("Category", back_populates="products")
-    products = relationship("Cart", back_populates="product")
-    comments = relationship("Comment", back_populates="product")
 
 
 class Category(Base):
@@ -45,8 +35,6 @@ class Category(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, unique=True, index=True)
-
-    products = relationship("Product", back_populates="category")
 
 
 class Cart(Base):
@@ -56,8 +44,8 @@ class Cart(Base):
     product_id = Column(Integer, ForeignKey("products.id"), primary_key=True, index=True)
     quantity = Column(Integer)
 
-    owner = relationship("User", back_populates="carts")
-    product = relationship("Product", back_populates="carts")
+    owner = Column(Integer, ForeignKey("users.id"))
+    product = Column(Integer, ForeignKey("products.id"))
 
 
 class Comment(Base):
@@ -68,8 +56,8 @@ class Comment(Base):
     stars = Column(Integer)
     message = Column(String)
 
-    author = relationship("User", back_populates="comments")
-    product = relationship("Product", back_populates="comments")
+    author = Column(Integer, ForeignKey("products.id"))
+    product = Column(Integer, ForeignKey("users.id"))
 
 
 class Commands(Base):
@@ -81,5 +69,5 @@ class Commands(Base):
     timestamp = Column(DateTime, default=datetime.utcnow)
     unit_price = Column(Float, index=True)
 
-    buyer = relationship("User", back_populates="commands")
-    seller = relationship("User", back_populates="commands")
+    buyer = Column(Integer, ForeignKey("users.id"))
+    seller = Column(Integer, ForeignKey("users.id"))
