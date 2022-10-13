@@ -2,6 +2,7 @@ from sqlalchemy.orm import Session
 
 from models.product import ProductCreate
 from models.user import UserCreate
+from models.category import Category, CategoryCreate
 from . import models
 from models import *
 
@@ -31,9 +32,21 @@ def get_products(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Product).offset(skip).limit(limit).all()
 
 
-def create_seller_product(db: Session, product: ProductCreate, user_id: int):
+def create_product(db: Session, product: ProductCreate, user_id: int):
     db_item = models.Product(**product.dict(), seller_id=user_id)
     db.add(db_item)
     db.commit()
     db.refresh(db_item)
     return db_item
+
+
+def get_category(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.Category).offset(skip).limit(limit).all()
+
+
+def create_category(db: Session, category: CategoryCreate):
+    db_category = models.Category(name=category.name)
+    db.add(db_category)
+    db.commit()
+    db.refresh(db_category)
+    return db_category

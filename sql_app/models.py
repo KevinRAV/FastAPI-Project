@@ -13,7 +13,7 @@ class User(Base):
     name = Column(String, index=True)
     email = Column(String, unique=True, index=True)
     hashed_password = Column(String)
-    is_admin = Column(Boolean, default=True)
+    is_admin = Column(Boolean, default=False)
 
 
 class Product(Base):
@@ -27,7 +27,6 @@ class Product(Base):
     image = Column(String, index=True)
     category_id = Column(Integer, ForeignKey("categories.id"))
     seller_id = Column(Integer, ForeignKey("users.id"))
-
 
 
 class Category(Base):
