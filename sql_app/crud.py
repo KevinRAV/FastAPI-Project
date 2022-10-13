@@ -6,6 +6,11 @@ from models.category import Category, CategoryCreate
 from . import models
 from models import *
 
+import hashlib
+import os
+
+salt = os.urandom(32)
+
 
 def get_user(db: Session, user_id: int):
     return db.query(models.User).filter(models.User.id == user_id).first()
@@ -20,8 +25,8 @@ def get_users(db: Session, skip: int = 0, limit: int = 100):
 
 
 def create_user(db: Session, user: UserCreate):
-    fake_hashed_password = user.password + "notreallyhashed"
-    db_user = models.User(name=user.name, email=user.email, hashed_password=fake_hashed_password)
+    password = hashlib.pbkdf2_hmac('sha256', user.password.encode('utf-8'), salt, 100000)
+    db_user = models.User(name=user.name, email=user.email, hashed_password=str(password))
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
