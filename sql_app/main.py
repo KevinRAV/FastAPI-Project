@@ -1,6 +1,9 @@
 from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.orm import Session
 
+from models.cart import Cart
+from models.category import Category, CategoryCreate
+from models.product import Product, ProductCreate
 from models.user import User, UserCreate
 from models.product import Product, ProductCreate
 from models.category import Category
