@@ -1,13 +1,12 @@
-from sqlalchemy.orm import Session
-
-from models.product import ProductCreate
-from models.user import UserCreate
-from models.category import Category, CategoryCreate
-from . import models
-from models import *
-
 import hashlib
 import os
+
+from sqlalchemy.orm import Session
+
+from models.category import CategoryCreate
+from models.product import ProductCreate
+from models.user import UserCreate
+from . import models
 
 salt = os.urandom(32)
 
@@ -37,12 +36,19 @@ def get_products(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Product).offset(skip).limit(limit).all()
 
 
-def create_product(db: Session, product: ProductCreate, user_id: int):
-    db_item = models.Product(**product.dict(), seller_id=user_id)
-    db.add(db_item)
+def create_product(db: Session, product: ProductCreate, seller_id: int):
+    db_product = models.Product(
+        name=product.name,
+        price=product.price,
+        description=product.description,
+        image=product.image,
+        stock=product.stock,
+        category=product.category,
+        seller_id=seller_id)
+    db.add(db_product)
     db.commit()
-    db.refresh(db_item)
-    return db_item
+    db.refresh(db_product)
+    return db_product
 
 
 def get_category(db: Session, skip: int = 0, limit: int = 100):
