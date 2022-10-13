@@ -13,7 +13,7 @@ class User(Base):
     name = Column(String, index=True)
     email = Column(String, unique=True, index=True)
     hashed_password = Column(String)
-    is_admin = Column(Boolean, default=False)
+    is_admin = Column(Boolean, default=True)
 
 
 class Product(Base):
@@ -68,6 +68,7 @@ class Commands(Base):
     quantity = Column(Integer, index=True)
     timestamp = Column(DateTime, default=datetime.utcnow)
     unit_price = Column(Float, index=True)
+    buyer_id = Column(Integer, ForeignKey("users.id"))
 
     buyer = Column(Integer, ForeignKey("users.id"))
     seller = Column(Integer, ForeignKey("users.id"))
