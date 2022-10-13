@@ -1,7 +1,8 @@
-from fastapi import Depends, FastAPI, HTTPException, Path, Query
+from fastapi import Depends, FastAPI, HTTPException, Query
 from sqlalchemy.orm import Session
 from typing import Union
 
+from models import category, user
 from models.cart import Cart
 from models.user import User, UserCreate
 from models.product import Product, ProductCreate
@@ -43,12 +44,12 @@ def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     return users
 
 
-# @app.post(f"/{User.id}/products/", response_model=Product)
-# def create_product(product: ProductCreate, user_id: User, db: Session = Depends(get_db)):
+# @app.post("/{user_id}/products/", response_model=Product)
+#def create_product(product: ProductCreate, user_id: User, db: Session = Depends(get_db)):
 #    db_product = crud.get_products(db, skip=0, limit=100)
 #    if db_product:
 #        raise HTTPException(status_code=400, detail="Product already registered")
-#   return crud.create_product(db=db, product=product, user_id=User.id)
+#    return crud.create_product(db=db, product=product, user_id=User.id)
 
 # get la liste de tous les produits
 
@@ -64,3 +65,26 @@ def create_categories(category: CategoryCreate, db: Session = Depends(get_db)):
 def read_categories(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     categories = crud.get_category(db, skip=skip, limit=limit)
     return categories
+
+
+@app.get("/categories/{categorie_id}")
+def read_categories_id(categorie_id: int, db: Session = Depends(get_db)):
+    category = crud.get_category_by_id(db, categorie_id)
+    if category:
+        return category
+    else:
+        raise HTTPException(status_code=400, detail=f"No Category with id {categorie_id}")
+
+
+# Products
+
+@app.post("/products/{seller_id}/", response_model=Product)
+def create_seller_product(
+        seller_id: int, product: ProductCreate, db: Session = Depends(get_db)):
+    return crud.create_product(db=db, product=product, seller_id=seller_id)
+
+
+@app.get("/products/", response_model=list[Product])
+def read_product(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    products = crud.get_products(db, skip=skip, limit=limit)
+    return products

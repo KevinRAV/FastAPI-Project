@@ -2,9 +2,8 @@ from sqlalchemy.orm import Session
 
 from models.product import ProductCreate
 from models.user import UserCreate
-from models.category import Category, CategoryCreate
+from models.category import CategoryCreate
 from . import models
-from models import *
 
 import hashlib
 import os
@@ -37,12 +36,20 @@ def get_products(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Product).offset(skip).limit(limit).all()
 
 
-def create_product(db: Session, product: ProductCreate, user_id: int):
-    db_item = models.Product(**product.dict(), seller_id=user_id)
-    db.add(db_item)
+def create_product(db: Session, product: ProductCreate, seller_id: int):
+    db_product = models.Product(
+        name=product.name,
+        price=product.price,
+        description=product.description,
+        image=product.image,
+        stock=product.stock,
+        category_id=product.category_id,
+        seller_id=seller_id
+    )
+    db.add(db_product)
     db.commit()
-    db.refresh(db_item)
-    return db_item
+    db.refresh(db_product)
+    return db_product
 
 
 def get_category(db: Session, skip: int = 0, limit: int = 100):
@@ -59,3 +66,9 @@ def create_category(db: Session, category: CategoryCreate):
 
 def get_category_name(db: Session, name: str) -> object:
     return db.query(models.Category).filter(models.Category.name == name).first()
+
+
+def get_category_by_id(db: Session, id: int) -> object:
+    return db.query(models.Category).filter(models.Category.id == id).first()
+
+
