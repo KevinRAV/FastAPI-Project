@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-from models import Category
+from models import category
 
 
 class ProductBase(BaseModel):

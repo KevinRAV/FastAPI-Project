@@ -10,7 +10,7 @@
 
 ---
  
-* #### POST /auth/signup
+* #### POST /auths/signup
 
 **params**: { }
 
@@ -28,7 +28,7 @@
 
 <br>
 
-* #### POST /auth/login
+* #### POST /auths/login
 **params**: { }
 
 **request body**: {
@@ -43,7 +43,7 @@
 
 <br>
 
-* #### GET /users
+* #### GET /users/me
 **request body**: {
 
 &nbsp; auth_token: str
@@ -433,7 +433,7 @@
 
 ---
 
-* #### POST /auth/admin
+* #### POST /auths/admin
 
 **request body**: {
 

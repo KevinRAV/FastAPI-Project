@@ -1,15 +1,5 @@
 from fastapi import APIRouter
 
-# class Article(BaseModel):
-#     id: str
-#     name: str
-#     vendeur: float
-#     categorie: []
-#     price: float
-#     avis: []
-#     description: str
-#     stock: int
-
 
 router = APIRouter()
 
