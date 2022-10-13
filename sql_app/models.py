@@ -39,6 +39,7 @@ class Product(Base):
     products = relationship("Cart", back_populates="product")
     comments = relationship("Comment", back_populates="product")
 
+
 class Category(Base):
     __tablename__ = "categories"
 
@@ -46,6 +47,7 @@ class Category(Base):
     name = Column(String, unique=True, index=True)
 
     products = relationship("Product", back_populates="category")
+
 
 class Cart(Base):
     __tablename__ = "carts"
@@ -57,16 +59,18 @@ class Cart(Base):
     owner = relationship("User", back_populates="carts")
     product = relationship("Product", back_populates="carts")
 
+
 class Comment(Base):
     __tablename__ = "comments"
 
     author_id = Column(Integer, ForeignKey("users.id"), primary_key=True, index=True)
-    product_id =  Column(Integer, ForeignKey("products.id"), primary_key=True, index=True)
+    product_id = Column(Integer, ForeignKey("products.id"), primary_key=True, index=True)
     stars = Column(Integer)
     message = Column(String)
 
     author = relationship("User", back_populates="comments")
     product = relationship("Product", back_populates="comments")
+
 
 class Commands(Base):
     __tablename__ = "commands"
