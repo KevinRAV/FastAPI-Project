@@ -55,3 +55,7 @@ def create_category(db: Session, category: CategoryCreate):
     db.commit()
     db.refresh(db_category)
     return db_category
+
+
+def get_category_name(db: Session, name: str) -> object:
+    return db.query(models.Category).filter(models.Category.name == name).first()
