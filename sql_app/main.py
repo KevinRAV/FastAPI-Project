@@ -45,7 +45,7 @@ def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
 
 
 # @app.post("/{user_id}/products/", response_model=Product)
-#def create_product(product: ProductCreate, user_id: User, db: Session = Depends(get_db)):
+# def create_product(product: ProductCreate, user_id: User, db: Session = Depends(get_db)):
 #    db_product = crud.get_products(db, skip=0, limit=100)
 #    if db_product:
 #        raise HTTPException(status_code=400, detail="Product already registered")
@@ -88,3 +88,8 @@ def create_seller_product(
 def read_product(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     products = crud.get_products(db, skip=skip, limit=limit)
     return products
+
+
+@app.delete("/products/{id}")
+def delete_product(id: int, db: Session = Depends(get_db)):
+    return crud.delete_product(db, id)

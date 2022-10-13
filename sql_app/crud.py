@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 
-from models.product import ProductCreate
+from models.product import ProductCreate, Product
 from models.user import UserCreate
 from models.category import CategoryCreate
 from . import models
@@ -72,3 +72,8 @@ def get_category_by_id(db: Session, id: int) -> object:
     return db.query(models.Category).filter(models.Category.id == id).first()
 
 
+def delete_product(db: Session, product_id: int) -> object:
+    product = db.query(models.Product).filter(models.Product.id == product_id).first()
+    db.delete(product)
+    db.commit()
+    return product
