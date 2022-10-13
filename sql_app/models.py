@@ -29,7 +29,6 @@ class Product(Base):
     seller_id = Column(Integer, ForeignKey("users.id"))
 
 
-
 class Category(Base):
     __tablename__ = "categories"
 
@@ -68,6 +67,7 @@ class Commands(Base):
     quantity = Column(Integer, index=True)
     timestamp = Column(DateTime, default=datetime.utcnow)
     unit_price = Column(Float, index=True)
+    buyer_id = Column(Integer, ForeignKey("users.id"))
 
     buyer = Column(Integer, ForeignKey("users.id"))
     seller = Column(Integer, ForeignKey("users.id"))
