@@ -10,6 +10,7 @@
 
 ---
  
+
 * #### POST /auths/signup
 
 **params**: { }
@@ -44,22 +45,28 @@
 <br>
 
 * #### GET /users/me
-**request body**: {
+
+**Header** : { 
 
 &nbsp; auth_token: str
 
 }
+
+**request body**: { }
 
 *return active_user: User*
 
 <br>
 
 * #### GET /commands
-**request body**: {
+
+**Header** : { 
 
 &nbsp; auth_token: str
 
 }
+
+**request body**: { }
 
 **queries**: {
 
@@ -76,11 +83,14 @@
 <br>
 
 * #### GET /commands/{user_id}
-**request body**: {
+
+**Header** : { 
 
 &nbsp; auth_token: str
 
 }
+
+**request body**: { }
 
 **queries**: {
 
@@ -194,6 +204,13 @@
 <br>
 
 * #### PUT /comments/{product_id}
+
+**Header** : { 
+
+&nbsp; auth_token: str
+
+}
+
 **params**: {
 
 &nbsp; product_id: int
@@ -201,8 +218,6 @@
 }
 
 **request body**: {
-
-&nbsp; auth_token: str
 
 &nbsp; stars: int
 
@@ -217,6 +232,13 @@
 <br>
 
 * #### POST /comments/{product_id}
+
+**Header** : { 
+
+&nbsp; auth_token: str
+
+}
+
 **params**: {
 
 &nbsp; product_id: int
@@ -224,8 +246,6 @@
 }
 
 **request body**: {
-
-&nbsp; auth_token: str
 
 &nbsp; stars: int
 
@@ -240,17 +260,20 @@
 <br>
 
 * #### DELETE /comments/{product_id}
+
+**Header** : { 
+
+&nbsp; auth_token: str
+
+}
+
 **params**: {
 
 &nbsp; product_id: int
 
 }
 
-**request body**: {
-
-&nbsp; auth_token: str
-
-}
+**request body**: { }
 
 **queries**: { }
 
@@ -263,13 +286,16 @@
 ---
 
 * #### GET /carts
+
 **params**: { }
 
-**request body**: {
+**Header** : { 
 
 &nbsp; auth_token: str
 
 }
+
+**request body**: { }
 
 **queries**: { }
 
@@ -279,13 +305,16 @@
 
 
 * #### DELETE /carts
-**params**: { }
 
-**request body**: {
+**Header** : { 
 
 &nbsp; auth_token: str
 
 }
+
+**params**: { }
+
+**request body**: { }
 
 **queries**: { }
 
@@ -294,15 +323,20 @@
 <br>
 
 * #### PATCH /carts/{product_id}
+
+**Header** : { 
+
+&nbsp; auth_token: str
+
+}
+
 **params**: {
 
 &nbsp; product_id: int
 
 }
 
-**request body**: { 
-
-&nbsp; auth_token: str
+**request body**: {
 
 &nbsp; quantity: int 
 
@@ -315,11 +349,16 @@
 <br>
 
 * #### POST /carts
+
+**Header** : { 
+
+&nbsp; auth_token: str
+
+}
+
 **params**: { }
 
 **request body**: {
-
-&nbsp; auth_token: str
 
 &nbsp; product_id: int
 
@@ -334,17 +373,19 @@
 <br>
 
 * #### DELETE /carts/{product_id}
+**Header** : { 
+
+&nbsp; auth_token: str
+
+}
+
 **params**: {
 
 &nbsp; product_id: int
 
 }
 
-**request body**: {
-
-&nbsp; auth_token: str
-
-}
+**request body**: { }
 
 **queries**: { }
 
@@ -353,13 +394,15 @@
 <br>
 
 * #### POST /commands
-**params**: { }
-
-**request body**: {
+**Header** : {
 
 &nbsp; auth_token: str
 
 }
+
+**params**: { }
+
+**request body**: { }
 
 *return commands: list[Command]*
 
@@ -371,9 +414,13 @@
 
 * #### POST /products
 
-**request body**: {
+**Header** : { 
 
-&nbsp; auth_token: str,
+&nbsp; auth_token: str
+
+}
+
+**request body**: {
 
 &nbsp; product_name: str,
 
@@ -395,9 +442,19 @@
 
 * #### PUT /products/{id}
 
-**request body**: {
+**Header** : { 
 
-&nbsp; auth_token: str,
+&nbsp; auth_token: str
+
+}
+
+**params**: { 
+
+&nbsp; id: int,
+
+}
+
+**request body**: {
 
 &nbsp; product_name: str,
 
@@ -419,11 +476,20 @@
 
 * #### DELETE /products/{id}
 
-**request body**: {
+**Header** : { 
 
-&nbsp;auth_token: str
+&nbsp; auth_token: str
 
 }
+
+**params**: { 
+
+&nbsp; id: int,
+
+}
+
+**request body**: { }
+
 
 *return deleted_product: Product*
 
@@ -433,7 +499,7 @@
 
 ---
 
-* #### POST /auths/admin
+* #### POST /auth/admin
 
 **request body**: {
 
@@ -459,12 +525,80 @@
 
 }
 
-**request body**: {
+**request body**: { }
+
+*return deleted_comment: Comment*
+
+<br>
+
+* #### POST /products/{seller_id}
+
+**Header** : { 
 
 &nbsp; auth_token: str
 
 }
 
-*return deleted_comment: Comment*
+**params**: {
+
+&nbsp; seller_id: int
+
+}
+
+**request body**: {
+
+&nbsp; name : str
+
+&nbsp; price : float
+
+&nbsp; description : str | none
+
+&nbsp; image : str | none
+
+&nbsp; stock : int 
+
+&nbsp; category_id : int 
+
+&nbsp; seller_id : int
+
+}
+
+*return posted_product: Product*
 
 <br>
+
+* #### POST /categories/
+
+**Header** : { 
+
+&nbsp; auth_token: str
+
+}
+
+**params**: { }
+
+**request body**: {
+
+category_name : str
+
+}
+
+*return posted_category: Category*
+
+* #### DELETE /categories/{id}
+
+**Header** : { 
+
+&nbsp; auth_token: str
+
+}
+
+**params**: { 
+
+id : int
+
+}
+
+**request body**: { }
+
+*return deleted_category: Category*
