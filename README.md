@@ -165,21 +165,6 @@
 
 <br>
 
-* #### GET /categories/{id}
-**params**: {
-
-&nbsp; id: int
-
-}
-
-**request body**: { }
-
-**queries**: { }
-
-*return categorie: Category*
-
-<br>
-
 * #### GET /comments/{product_id}
 **params**: {
 
@@ -498,22 +483,6 @@
 ### &nbsp; 5) Admin
 
 ---
-
-* #### POST /auth/admin
-
-**request body**: {
-
-&nbsp; mail: str
-
-&nbsp; name: str
-
-&nbsp; password: str
-
-}
-
-*return auth_token: str*
-
-<br>
 
 * #### DELETE /comments/{product_id}/{user_id}
 

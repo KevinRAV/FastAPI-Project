@@ -16,7 +16,7 @@ def get_my_carts(auth_token: str = Header(min_length=1, max_length=50), db: Sess
 
 
 @router.post("/carts", response_model=Cart)
-def get_my_carts(
+def new_cart(
         cart: CartCreate,
         auth_token: str = Header(min_length=1, max_length=50),
         db: Session = Depends(get_db)
