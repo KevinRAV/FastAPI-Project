@@ -29,10 +29,16 @@ def signup(user: UserCreate, db: Session = Depends(get_db)):
 
 @router.post("/auths/login")
 def login(credentials: UserCredentials, db: Session = Depends(get_db)):
+    """
+        Login a user with data sent in request body and returns an auth token for this user
+
+        :param credentials: user infos
+
+        :return: auth_token: str
+    """
     db_account = crud.read(models.User, [["email", credentials.email], ["hashed_password", credentials.password]], db)
     if len(db_account):
         auth_token = db_account[0].email
         return {"auth_token": auth_token}
     else:
-        # TODO status code
-        return
+        raise HTTPException(status_code=400, detail="Bad Request : Login data unmatch. Your email or password is wrong")
