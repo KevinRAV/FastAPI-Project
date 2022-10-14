@@ -19,6 +19,7 @@ def create(row, db: Session):
 def read(table, where, db: Session):
     """
     Returns every entry from table matching criterias in where using current db
+
     :param table: sql_app.models.User, sql_app.models.Product...
     :param where: [["id", 0], ["name", "value"]...]
     :param db: the one created at route instanciation
