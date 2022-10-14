@@ -2,6 +2,7 @@ from fastapi import APIRouter
 
 from models.user import UserCredentials
 from models.user import UserCreate
+from sql_app import crud
 
 router = APIRouter()
 

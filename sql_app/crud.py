@@ -1,14 +1,20 @@
 from sqlalchemy.orm import Session
+from fastapi import Depends
+from pydantic import BaseModel
+
+from . import database
 
 from models.product import ProductCreate, Product
 from models.user import UserCreate
 from models.category import CategoryCreate
 from . import models
 
-import hashlib
-import os
 
-salt = os.urandom(32)
+def create(row, db: Session):
+    db.add(row)
+    db.commit()
+    db.refresh(row)
+    return row
 
 
 def get_user(db: Session, user_id: int):
@@ -24,8 +30,7 @@ def get_users(db: Session, skip: int = 0, limit: int = 100):
 
 
 def create_user(db: Session, user: UserCreate):
-    password = hashlib.pbkdf2_hmac('sha256', user.password.encode('utf-8'), salt, 100000)
-    db_user = models.User(name=user.name, email=user.email, hashed_password=str(password))
+    db_user = models.User(name=user.name, email=user.email, hashed_password=user.password)
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
