@@ -3,9 +3,9 @@ import os
 
 from sqlalchemy.orm import Session
 
-from models.category import CategoryCreate
-from models.product import ProductCreate
+from models.product import ProductCreate, Product
 from models.user import UserCreate
+from models.category import CategoryCreate
 from . import models
 
 salt = os.urandom(32)
@@ -43,8 +43,9 @@ def create_product(db: Session, product: ProductCreate, seller_id: int):
         description=product.description,
         image=product.image,
         stock=product.stock,
-        category=product.category,
-        seller_id=seller_id)
+        category_id=product.category_id,
+        seller_id=seller_id
+    )
     db.add(db_product)
     db.commit()
     db.refresh(db_product)
@@ -65,3 +66,27 @@ def create_category(db: Session, category: CategoryCreate):
 
 def get_category_name(db: Session, name: str) -> object:
     return db.query(models.Category).filter(models.Category.name == name).first()
+
+
+def get_category_by_id(db: Session, id: int) -> object:
+    return db.query(models.Category).filter(models.Category.id == id).first()
+
+
+def delete_product(db: Session, product_id: int) -> object:
+    product = db.query(models.Product).filter(models.Product.id == product_id).first()
+    db.delete(product)
+    db.commit()
+    return product
+
+
+def update_product(db: Session, product_id: int, updated_product: Product):
+    legacy_product = db.query(models.Product).filter(models.Product.id == product_id).first()
+    legacy_product.name = updated_product.name
+    legacy_product.category_id = updated_product.category_id
+    legacy_product.description = updated_product.description
+    legacy_product.image = updated_product.image
+    legacy_product.stock = updated_product.stock
+    legacy_product.price = updated_product.price
+    db.commit()
+    db.refresh(legacy_product)
+    return legacy_product
