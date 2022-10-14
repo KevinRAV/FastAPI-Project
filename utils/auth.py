@@ -1,14 +1,27 @@
+from fastapi import HTTPException
+
 from sql_app.crud import read
 from sql_app import models
 from models.user import User
 
 
 def read_token(token: str, db):
+    """
+    This authtoken who passed in header, this function:
+
+    Read the authtoken of user who is an email
+
+    :param token: str
+
+    :param db:
+
+    :return: user
+
+    """
     # TODO in db get user by email
     users = read(models.User, [["email", token]], db)
     if len(users) == 0:
-        # TODO status code
-        return
+        raise HTTPException(status_code=401, detail="Unauthorized : The auth_token is wrong !")
     else:
         db_user = users[0]
         user = User(

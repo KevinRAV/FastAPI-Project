@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 
 from models.user import UserCredentials
 from models.user import UserCreate
@@ -11,7 +11,9 @@ router = APIRouter()
 def signup(account: UserCreate):
     """
     Create a new user using data sent in request body and returns an auth token for this user
+
     :param account: new user infos
+
     :return: auth_token: str
     """
     # TODO in db add account
@@ -21,11 +23,17 @@ def signup(account: UserCreate):
 
 @router.post("/auths/login")
 def login(credentials: UserCredentials):
+    """
+        Login a user with data sent in request body and returns an auth token for this user
+
+        :param credentials: user infos
+
+        :return: auth_token: str
+    """
     # TODO in db get account
     db_account = credentials
     if db_account.password == credentials.password:
         auth_token = db_account.email
         return {"auth_token": auth_token}
     else:
-        # TODO status code
-        return
+        raise HTTPException(status_code=400, detail="Bad Request : Login data unmatch. Your email or password is wrong")
