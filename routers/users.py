@@ -10,9 +10,3 @@ router = APIRouter()
 @router.get("/users/me")
 def get_active_user(auth_token: str = Header(min_length=1, max_length=50), db: Session = Depends(get_db)):
     return read_token(auth_token, db)
-
-
-@router.get("/commands")
-def get_active_user(auth_token: str = Header(min_length=1, max_length=50), db: Session = Depends(get_db)):
-    # TODO in db
-    return read_token(auth_token, db)

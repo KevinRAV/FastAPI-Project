@@ -18,7 +18,6 @@ def read_token(token: str, db):
     :return: user
 
     """
-    # TODO in db get user by email
     users = read(models.User, [["email", token]], db)
     if len(users) == 0:
         raise HTTPException(status_code=401, detail="Unauthorized : The auth_token is wrong !")

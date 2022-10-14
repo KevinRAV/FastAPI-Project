@@ -1,12 +1,14 @@
 from pydantic import BaseModel
-from datetime import date
+from datetime import datetime
 
 
 class CommandBase(BaseModel):
     product_name: str
     quantity: int
-    timestamp: date
     unit_price: float
+    buyer_id: int
+    seller_id: int
+    timestamp: datetime = datetime.utcnow()
 
 
 class CommandCreate(CommandBase):
@@ -19,8 +21,6 @@ class CommandDelete(CommandBase):
 
 class Command(CommandBase):
     id: int
-    buyer_id: int
-    seller_id: int
 
     class Config:
         orm_mode = True
