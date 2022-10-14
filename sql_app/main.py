@@ -1,29 +1,14 @@
-from fastapi import Depends, FastAPI, HTTPException, Query
+from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.orm import Session
-from typing import Union
 
-from models import category, user
-from models.cart import Cart
 from models.user import User, UserCreate
 from models.product import Product, ProductCreate
 from models.category import Category, CategoryCreate
-from . import crud
-from . import models
+from . import crud, models
 
-from .database import SessionLocal, engine
-
-models.Base.metadata.create_all(bind=engine)
+from .database import get_db
 
 app = FastAPI()
-
-
-# Dependency
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 
 # post un nouveau user
@@ -58,7 +43,7 @@ def create_categories(category: CategoryCreate, db: Session = Depends(get_db)):
     db_category = crud.get_category_name(db, name=category.name)
     if db_category:
         raise HTTPException(status_code=400, detail="Category already registered")
-    return crud.create_category(db=db, category=category)
+    return crud.create(models.User(**category.dict()))
 
 
 @app.get("/categories", response_model=list[Category])

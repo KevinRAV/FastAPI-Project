@@ -10,7 +10,8 @@
 
 ---
  
-* #### POST /auth/signup
+
+* #### POST /auths/signup
 
 **params**: { }
 
@@ -28,7 +29,7 @@
 
 <br>
 
-* #### POST /auth/login
+* #### POST /auths/login
 **params**: { }
 
 **request body**: {
@@ -43,7 +44,7 @@
 
 <br>
 
-* #### GET /users
+* #### GET /users/me
 
 **Header** : { 
 
@@ -245,6 +246,7 @@
 }
 
 **request body**: {
+
 &nbsp; stars: int
 
 &nbsp; message: str
@@ -285,13 +287,13 @@
 
 * #### GET /carts
 
+**params**: { }
+
 **Header** : { 
 
 &nbsp; auth_token: str
 
 }
-
-**params**: { }
 
 **request body**: { }
 
@@ -371,7 +373,6 @@
 <br>
 
 * #### DELETE /carts/{product_id}
-
 **Header** : { 
 
 &nbsp; auth_token: str
@@ -393,8 +394,7 @@
 <br>
 
 * #### POST /commands
-
-**Header** : { 
+**Header** : {
 
 &nbsp; auth_token: str
 
@@ -448,6 +448,12 @@
 
 }
 
+**params**: { 
+
+&nbsp; id: int,
+
+}
+
 **request body**: {
 
 &nbsp; product_name: str,
@@ -476,7 +482,14 @@
 
 }
 
+**params**: { 
+
+&nbsp; id: int,
+
+}
+
 **request body**: { }
+
 
 *return deleted_product: Product*
 
@@ -589,6 +602,3 @@ id : int
 **request body**: { }
 
 *return deleted_category: Category*
-
-
-
