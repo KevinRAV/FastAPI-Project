@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 
 from models.product import ProductCreate, Product
+from models.comment import CommentCreate, Comment, CommentDelete
 from models.user import UserCreate
 from models.category import CategoryCreate
 from . import models
@@ -90,3 +91,29 @@ def update_product(db: Session, product_id: int, updated_product: Product):
     db.commit()
     db.refresh(legacy_product)
     return legacy_product
+
+
+def create_comment(db: Session, comment: CommentCreate, user_id: int, product_id: int):
+    db_comment = models.Comment(
+        author_id=user_id,
+        product_id=product_id,
+        stars=comment.stars,
+        message=comment.message,
+        author=user_id,
+        product=product_id,
+    )
+    db.add(db_comment)
+    db.commit()
+    db.refresh(db_comment)
+    return db_comment
+
+
+def get_comments(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.Comment).offset(skip).limit(limit).all()
+
+
+def delete_comment(db: Session, user_id: int, product_id: int):
+    comment = db.query(models.Comment).filter(models.Comment.product_id == product_id, models.Comment.author_id == user_id).first()
+    db.delete(comment)
+    db.commit()
+    return comment
