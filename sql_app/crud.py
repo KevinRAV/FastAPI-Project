@@ -1,6 +1,4 @@
 from sqlalchemy.orm import Session
-from fastapi import Depends
-from pydantic import BaseModel
 
 from . import database
 
@@ -17,8 +15,22 @@ def create(row, db: Session):
     return row
 
 
+def read(table, where, db: Session):
+    """
+    Returns every entry from table matching criterias in where using current db
+    :param table: sql_app.models.User, sql_app.models.Product...
+    :param where: [["id", 0], ["name", "value"]...]
+    :param db: the one created at route instanciation
+    :return: list[table rows matching where]
+    """
+    res = db.query(table)
+    for criteria in where:
+        res = res.filter(table.__dict__[criteria[0]] == criteria[1])
+    return res.all()
+
+
 def get_user(db: Session, user_id: int):
-    return db.query(models.User).filter(models.User.id == user_id).first()
+    return db.query(models.User).filter(models.User.id == user_id and models.User.id == user_id).first()
 
 
 def get_user_by_email(db: Session, email: str) -> object:
