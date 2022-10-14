@@ -4,11 +4,9 @@ from sqlalchemy.orm import Session
 from models.cart import Cart, CartCreate
 from models.category import Category, CategoryCreate
 from models.command import Command, CommandCreate
+from models.comment import Comment, CommentCreate
 from models.product import Product, ProductCreate
 from models.user import User, UserCreate
-from models.product import Product, ProductCreate
-from models.category import Category, CategoryCreate
-from models.comment import Comment, CommentCreate
 from . import crud
 from . import models
 from .database import SessionLocal, engine
@@ -75,6 +73,11 @@ def read_categories_id(categorie_id: int, db: Session = Depends(get_db)):
         return category
     else:
         raise HTTPException(status_code=400, detail=f"No Category with id {categorie_id}")
+
+
+@app.delete("/categories/{id}", response_model=Category)
+def delete_category_product(id: int, db: Session = Depends(get_db)):
+    return crud.delete_category(db, id)
 
 
 # Products

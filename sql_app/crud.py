@@ -6,8 +6,8 @@ from sqlalchemy.orm import Session
 from models.cart import CartCreate, Cart
 from models.category import CategoryCreate
 from models.command import CommandCreate
+from models.comment import CommentCreate, Comment
 from models.product import ProductCreate, Product
-from models.comment import CommentCreate, Comment, CommentDelete
 from models.user import UserCreate
 from . import models
 
@@ -75,6 +75,13 @@ def get_category_by_id(db: Session, id: int) -> object:
     return db.query(models.Category).filter(models.Category.id == id).first()
 
 
+def delete_category(db: Session, id: int) -> object:
+    category = db.query(models.Category).filter(models.Category.id == id).first()
+    db.delete(category)
+    db.commit()
+    return category
+
+
 def delete_product(db: Session, id: int) -> object:
     product = db.query(models.Product).filter(models.Product.id == id).first()
     db.delete(product)
@@ -135,7 +142,6 @@ def update_cart(db: Session, product_id: int, update_cart: Cart):
 def create_command(db: Session, command: CommandCreate, buyer_id: int):
     db_command = models.Commands(
         buyer_id=buyer_id,
-        seller_id=command.seller_id,
         product_name=command.product_name,
         quantity=command.quantity,
         timestamp=command.timestamp,
