@@ -103,18 +103,19 @@ def create_comment_for_user(
 
 @app.get("/comments", response_model=list[Comment])
 def read_comments(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    return comments
     comments = crud.get_comments(db, skip=skip, limit=limit)
+    return comments
 
 
 @app.delete("/comment/{user_id}/{product_id}", response_model=Comment)
 def delete_comment_for_user(user_id: int, product_id: int, db: Session = Depends(get_db)):
-
     return crud.delete_comment(db, user_id, product_id)
+
 
 @app.put("/comment/{user_id}/{product_id}")
 def update_comment_for_user(user_id: int, product_id: int, comment: Comment, db: Session = Depends(get_db)):
     return crud.update_comment(db, user_id, product_id, comment)
+
 
 @app.post("/carts/", response_model=Cart)
 def create_user_cart(
@@ -122,14 +123,13 @@ def create_user_cart(
     return crud.create_cart(db=db, cart=cart, owner_id=owner_id, product_id=product_id)
 
 
-
-def read_cart(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
 @app.get("/carts/", response_model=list[Cart])
+def read_cart(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     carts = crud.get_carts(db, skip=skip, limit=limit)
     return carts
 
-@app.delete("/carts/{product_id}")
 
+@app.delete("/carts/{product_id}")
 def delete_cart_by_id(product_id: int, db: Session = Depends(get_db)):
     return crud.delete_cart_by_id(db, product_id)
 

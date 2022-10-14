@@ -12,6 +12,16 @@ from . import models
 
 
 def create(row, db: Session):
+    """
+    Function creation do post request with datats row and db in params
+
+    :param row: table
+
+    :param db: Session database
+
+    :return: row
+
+    """
     db.add(row)
     db.commit()
     db.refresh(row)
@@ -23,9 +33,13 @@ def read(table, where, db: Session):
     Returns every entry from table matching criterias in where using current db
 
     :param table: sql_app.models.User, sql_app.models.Product...
+
     :param where: [["id", 0], ["name", "value"]...]
+
     :param db: the one created at route instanciation
+
     :return: list[table rows matching where]
+
     """
     res = db.query(table)
     for criteria in where:
@@ -34,10 +48,31 @@ def read(table, where, db: Session):
 
 
 def get_user(db: Session, user_id: int):
+    """
+    Function who works with get request API and get datas table User
+
+    :param db: Session
+
+    :param user_id: int
+
+    :return: table User
+
+    """
     return db.query(models.User).filter(models.User.id == user_id and models.User.id == user_id).first()
 
 
 def get_user_by_email(db: Session, email: str) -> object:
+    """
+        Function who works with get request API and get in table User, the email of the User
+
+        :param db: Session
+
+        :param email: str
+
+        :return: table User
+
+    """
+
     return db.query(models.User).filter(models.User.email == email).first()
 
 
