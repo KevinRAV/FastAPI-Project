@@ -4,13 +4,37 @@ from models.cart import CartCreate, Cart
 from models.category import CategoryCreate
 from models.command import CommandCreate
 from models.comment import CommentCreate, Comment
+from . import database
+
 from models.product import ProductCreate, Product
 from models.user import UserCreate
 from . import models
 
 
+def create(row, db: Session):
+    db.add(row)
+    db.commit()
+    db.refresh(row)
+    return row
+
+
+def read(table, where, db: Session):
+    """
+    Returns every entry from table matching criterias in where using current db
+
+    :param table: sql_app.models.User, sql_app.models.Product...
+    :param where: [["id", 0], ["name", "value"]...]
+    :param db: the one created at route instanciation
+    :return: list[table rows matching where]
+    """
+    res = db.query(table)
+    for criteria in where:
+        res = res.filter(table.__dict__[criteria[0]] == criteria[1])
+    return res.all()
+
+
 def get_user(db: Session, user_id: int):
-    return db.query(models.User).filter(models.User.id == user_id).first()
+    return db.query(models.User).filter(models.User.id == user_id and models.User.id == user_id).first()
 
 
 def get_user_by_email(db: Session, email: str) -> object:
@@ -22,7 +46,7 @@ def get_users(db: Session, skip: int = 0, limit: int = 100):
 
 
 def create_user(db: Session, user: UserCreate):
-    db_user = models.User(name=user.name, email=user.email, password=user.password)
+    db_user = models.User(name=user.name, email=user.email, hashed_password=user.password)
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
@@ -145,6 +169,7 @@ def create_command(db: Session, command: CommandCreate, buyer_id: int):
     db.commit()
     db.refresh(db_command)
     return db_command
+
 
 
 def create_comment(db: Session, comment: CommentCreate, user_id: int, product_id: int):

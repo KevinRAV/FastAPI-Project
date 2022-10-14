@@ -7,22 +7,11 @@ from models.command import Command, CommandCreate
 from models.comment import Comment, CommentCreate
 from models.product import Product, ProductCreate
 from models.user import User, UserCreate
-from . import crud
-from . import models
+from . import crud, models
+from .database import get_db
 from .database import SessionLocal, engine
 
-models.Base.metadata.create_all(bind=engine)
-
 app = FastAPI()
-
-
-# Dependency
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 
 # post un nouveau user
@@ -57,7 +46,7 @@ def create_categories(category: CategoryCreate, db: Session = Depends(get_db)):
     db_category = crud.get_category_name(db, name=category.name)
     if db_category:
         raise HTTPException(status_code=400, detail="Category already registered")
-    return crud.create_category(db=db, category=category)
+    return crud.create(models.User(**category.dict()))
 
 
 @app.get("/categories", response_model=list[Category])
@@ -114,19 +103,18 @@ def create_comment_for_user(
 
 @app.get("/comments", response_model=list[Comment])
 def read_comments(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    comments = crud.get_comments(db, skip=skip, limit=limit)
     return comments
+    comments = crud.get_comments(db, skip=skip, limit=limit)
 
 
 @app.delete("/comment/{user_id}/{product_id}", response_model=Comment)
 def delete_comment_for_user(user_id: int, product_id: int, db: Session = Depends(get_db)):
-    return crud.delete_comment(db, user_id, product_id)
 
+    return crud.delete_comment(db, user_id, product_id)
 
 @app.put("/comment/{user_id}/{product_id}")
 def update_comment_for_user(user_id: int, product_id: int, comment: Comment, db: Session = Depends(get_db)):
     return crud.update_comment(db, user_id, product_id, comment)
-
 
 @app.post("/carts/", response_model=Cart)
 def create_user_cart(
@@ -134,13 +122,14 @@ def create_user_cart(
     return crud.create_cart(db=db, cart=cart, owner_id=owner_id, product_id=product_id)
 
 
-@app.get("/carts/", response_model=list[Cart])
+
 def read_cart(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+@app.get("/carts/", response_model=list[Cart])
     carts = crud.get_carts(db, skip=skip, limit=limit)
     return carts
 
-
 @app.delete("/carts/{product_id}")
+
 def delete_cart_by_id(product_id: int, db: Session = Depends(get_db)):
     return crud.delete_cart_by_id(db, product_id)
 

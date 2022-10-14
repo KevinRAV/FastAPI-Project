@@ -6,7 +6,7 @@ class CartBase(BaseModel):
 
 
 class CartCreate(CartBase):
-    pass
+    product_id: int
 
 
 class CartDelete(CartBase):
