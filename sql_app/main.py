@@ -1,13 +1,15 @@
 from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.orm import Session
 
-from models.user import User, UserCreate
-from models.product import Product, ProductCreate
+from models.cart import Cart, CartCreate
 from models.category import Category, CategoryCreate
+from models.command import Command, CommandCreate
 from models.comment import Comment, CommentCreate
+from models.product import Product, ProductCreate
+from models.user import User, UserCreate
 from . import crud, models
-
 from .database import get_db
+from .database import SessionLocal, engine
 
 app = FastAPI()
 
@@ -62,6 +64,11 @@ def read_categories_id(categorie_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail=f"No Category with id {categorie_id}")
 
 
+@app.delete("/categories/{id}", response_model=Category)
+def delete_category_product(id: int, db: Session = Depends(get_db)):
+    return crud.delete_category(db, id)
+
+
 # Products
 
 @app.post("/products/{seller_id}", response_model=Product)
@@ -96,15 +103,43 @@ def create_comment_for_user(
 
 @app.get("/comments", response_model=list[Comment])
 def read_comments(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    comments = crud.get_comments(db, skip=skip, limit=limit)
     return comments
+    comments = crud.get_comments(db, skip=skip, limit=limit)
 
 
 @app.delete("/comment/{user_id}/{product_id}", response_model=Comment)
 def delete_comment_for_user(user_id: int, product_id: int, db: Session = Depends(get_db)):
-    return crud.delete_comment(db, user_id, product_id)
 
+    return crud.delete_comment(db, user_id, product_id)
 
 @app.put("/comment/{user_id}/{product_id}")
 def update_comment_for_user(user_id: int, product_id: int, comment: Comment, db: Session = Depends(get_db)):
     return crud.update_comment(db, user_id, product_id, comment)
+
+@app.post("/carts/", response_model=Cart)
+def create_user_cart(
+        owner_id: int, product_id: int, cart: CartCreate, db: Session = Depends(get_db)):
+    return crud.create_cart(db=db, cart=cart, owner_id=owner_id, product_id=product_id)
+
+
+
+def read_cart(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+@app.get("/carts/", response_model=list[Cart])
+    carts = crud.get_carts(db, skip=skip, limit=limit)
+    return carts
+
+@app.delete("/carts/{product_id}")
+
+def delete_cart_by_id(product_id: int, db: Session = Depends(get_db)):
+    return crud.delete_cart_by_id(db, product_id)
+
+
+@app.patch("/carts/{product_id}")
+def update_cart(product_id: int, cart: Cart, db: Session = Depends(get_db)):
+    return crud.update_cart(db, product_id, cart)
+
+
+@app.post("/commands/", response_model=Command)
+def create_user_command(
+        buyer_id: int, command: CommandCreate, db: Session = Depends(get_db)):
+    return crud.create_command(db=db, command=command, buyer_id=buyer_id)

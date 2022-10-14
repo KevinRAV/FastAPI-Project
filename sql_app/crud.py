@@ -1,11 +1,13 @@
 from sqlalchemy.orm import Session
 
+from models.cart import CartCreate, Cart
+from models.category import CategoryCreate
+from models.command import CommandCreate
+from models.comment import CommentCreate, Comment
 from . import database
 
 from models.product import ProductCreate, Product
 from models.user import UserCreate
-from models.category import CategoryCreate
-from models.comment import CommentCreate, Comment, CommentDelete
 from . import models
 
 
@@ -91,15 +93,22 @@ def get_category_by_id(db: Session, id: int) -> object:
     return db.query(models.Category).filter(models.Category.id == id).first()
 
 
-def delete_product(db: Session, product_id: int) -> object:
-    product = db.query(models.Product).filter(models.Product.id == product_id).first()
+def delete_category(db: Session, id: int) -> object:
+    category = db.query(models.Category).filter(models.Category.id == id).first()
+    db.delete(category)
+    db.commit()
+    return category
+
+
+def delete_product(db: Session, id: int) -> object:
+    product = db.query(models.Product).filter(models.Product.id == id).first()
     db.delete(product)
     db.commit()
     return product
 
 
-def update_product(db: Session, product_id: int, updated_product: Product):
-    legacy_product = db.query(models.Product).filter(models.Product.id == product_id).first()
+def update_product(db: Session, id: int, updated_product: Product):
+    legacy_product = db.query(models.Product).filter(models.Product.id == id).first()
     legacy_product.name = updated_product.name
     legacy_product.category_id = updated_product.category_id
     legacy_product.description = updated_product.description
@@ -109,6 +118,58 @@ def update_product(db: Session, product_id: int, updated_product: Product):
     db.commit()
     db.refresh(legacy_product)
     return legacy_product
+
+
+def create_cart(db: Session, cart: CartCreate, owner_id: int, product_id: int):
+    db_cart = models.Cart(
+        owner_id=owner_id,
+        product_id=product_id,
+        quantity=cart.quantity
+    )
+    db.add(db_cart)
+    db.commit()
+    db.refresh(db_cart)
+    return db_cart
+
+
+def get_carts(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.Cart).offset(skip).limit(limit).all()
+
+
+def delete_cart_by_id(db: Session, product_id: int) -> object:
+    carts = db.query(models.Cart).filter(models.Cart.product_id == product_id).first()
+    db.delete(carts)
+    db.commit()
+    return carts
+
+
+def update_cart(db: Session, product_id: int, update_cart: Cart):
+    db_cart = db.query(models.Cart).filter(models.Cart.product_id == product_id).one_or_none()
+    if db_cart is None:
+        return None
+    for var, value in vars(update_cart).items():
+        setattr(db_cart, var, value) if value else None
+
+    # db_cart.update = modified_now
+    db.add(db_cart)
+    db.commit()
+    db.refresh(db_cart)
+    return db_cart
+
+
+def create_command(db: Session, command: CommandCreate, buyer_id: int):
+    db_command = models.Commands(
+        buyer_id=buyer_id,
+        product_name=command.product_name,
+        quantity=command.quantity,
+        timestamp=command.timestamp,
+        unit_price=command.unit_price
+    )
+    db.add(db_command)
+    db.commit()
+    db.refresh(db_command)
+    return db_command
+
 
 
 def create_comment(db: Session, comment: CommentCreate, user_id: int, product_id: int):
