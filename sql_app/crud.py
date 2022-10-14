@@ -7,6 +7,7 @@ from models.cart import CartCreate, Cart
 from models.category import CategoryCreate
 from models.command import CommandCreate
 from models.product import ProductCreate, Product
+from models.comment import CommentCreate, Comment, CommentDelete
 from models.user import UserCreate
 from . import models
 
@@ -144,3 +145,45 @@ def create_command(db: Session, command: CommandCreate, buyer_id: int):
     db.commit()
     db.refresh(db_command)
     return db_command
+
+
+def create_comment(db: Session, comment: CommentCreate, user_id: int, product_id: int):
+    db_comment = models.Comment(
+        author_id=user_id,
+        product_id=product_id,
+        stars=comment.stars,
+        message=comment.message,
+        author=user_id,
+        product=product_id,
+    )
+    db.add(db_comment)
+    db.commit()
+    db.refresh(db_comment)
+    return db_comment
+
+
+def get_comments(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.Comment).offset(skip).limit(limit).all()
+
+
+def delete_comment(db: Session, user_id: int, product_id: int):
+    comment = db.query(models.Comment).filter(models.Comment.product_id == product_id,
+                                              models.Comment.author_id == user_id).first()
+    db.delete(comment)
+    db.commit()
+    return comment
+
+
+def update_comment(db: Session, user_id: int, product_id: int, updated_comment: Comment):
+    legacy_comment = db.query(models.Comment).filter(models.Comment.product_id == product_id,
+                                                     models.Comment.author_id == user_id).first()
+    legacy_comment.author_id = updated_comment.author_id
+    legacy_comment.product_id = updated_comment.product_id
+    legacy_comment.stars = updated_comment.stars
+    legacy_comment.message = updated_comment.message
+    legacy_comment.author = updated_comment.author_id
+    legacy_comment.product = updated_comment.product_id
+
+    db.commit()
+    db.refresh(legacy_comment)
+    return legacy_comment

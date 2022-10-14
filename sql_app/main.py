@@ -6,6 +6,9 @@ from models.category import Category, CategoryCreate
 from models.command import Command, CommandCreate
 from models.product import Product, ProductCreate
 from models.user import User, UserCreate
+from models.product import Product, ProductCreate
+from models.category import Category, CategoryCreate
+from models.comment import Comment, CommentCreate
 from . import crud
 from . import models
 from .database import SessionLocal, engine
@@ -96,6 +99,30 @@ def delete_product(id: int, db: Session = Depends(get_db)):
 @app.put("/products/{id}")
 def update_product(id: int, product: Product, db: Session = Depends(get_db)):
     return crud.update_product(db, id, product)
+
+
+# Comment
+
+@app.post("/comment/{user_id}/{product_id}", response_model=Comment)
+def create_comment_for_user(
+        user_id: int, product_id: int, comment: CommentCreate, db: Session = Depends(get_db)):
+    return crud.create_comment(db, comment, user_id, product_id)
+
+
+@app.get("/comments", response_model=list[Comment])
+def read_comments(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    comments = crud.get_comments(db, skip=skip, limit=limit)
+    return comments
+
+
+@app.delete("/comment/{user_id}/{product_id}", response_model=Comment)
+def delete_comment_for_user(user_id: int, product_id: int, db: Session = Depends(get_db)):
+    return crud.delete_comment(db, user_id, product_id)
+
+
+@app.put("/comment/{user_id}/{product_id}")
+def update_comment_for_user(user_id: int, product_id: int, comment: Comment, db: Session = Depends(get_db)):
+    return crud.update_comment(db, user_id, product_id, comment)
 
 
 @app.post("/carts/", response_model=Cart)
