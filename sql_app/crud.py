@@ -113,7 +113,23 @@ def get_comments(db: Session, skip: int = 0, limit: int = 100):
 
 
 def delete_comment(db: Session, user_id: int, product_id: int):
-    comment = db.query(models.Comment).filter(models.Comment.product_id == product_id, models.Comment.author_id == user_id).first()
+    comment = db.query(models.Comment).filter(models.Comment.product_id == product_id,
+                                              models.Comment.author_id == user_id).first()
     db.delete(comment)
     db.commit()
     return comment
+
+
+def update_comment(db: Session, user_id: int, product_id: int, updated_comment: Comment):
+    legacy_comment = db.query(models.Comment).filter(models.Comment.product_id == product_id,
+                                                     models.Comment.author_id == user_id).first()
+    legacy_comment.author_id = updated_comment.author_id
+    legacy_comment.product_id = updated_comment.product_id
+    legacy_comment.stars = updated_comment.stars
+    legacy_comment.message = updated_comment.message
+    legacy_comment.author = updated_comment.author_id
+    legacy_comment.product = updated_comment.product_id
+
+    db.commit()
+    db.refresh(legacy_comment)
+    return legacy_comment

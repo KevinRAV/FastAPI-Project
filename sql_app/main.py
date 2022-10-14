@@ -118,3 +118,8 @@ def read_comments(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
 @app.delete("/comment/{user_id}/{product_id}", response_model=Comment)
 def delete_comment_for_user(user_id: int, product_id: int, db: Session = Depends(get_db)):
     return crud.delete_comment(db, user_id, product_id)
+
+
+@app.put("/comment/{user_id}/{product_id}")
+def update_comment_for_user(user_id: int, product_id: int, comment: Comment, db: Session = Depends(get_db)):
+    return crud.update_comment(db, user_id, product_id, comment)
