@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from fastapi import APIRouter, Depends, HTTPException, Header
 
 from models.category import *
@@ -12,13 +10,8 @@ router = APIRouter()
 
 
 @router.get("/categories")
-def get_categories(name: str = "", id: int | None = None, db: Session = Depends(get_db)):
-    query = []
-    if len(name) > 0:
-        query = query.append(["name", name])
-    if id is not None:
-        query = query.append(["id", id])
-    return crud.read(models.Category, query, db)
+def get_categories(db: Session = Depends(get_db)):
+    return crud.read(models.Category, [], db)
 
 
 @router.post("/categories", response_model=Category)
