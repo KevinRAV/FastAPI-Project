@@ -5,11 +5,12 @@ from sql_app.database import get_db
 from models.cart import CartCreate, Cart
 from utils.auth import read_token
 from sql_app import crud, models
+from typing import List
 
 router = APIRouter()
 
 
-@router.get("/carts", response_model=list[Cart])
+@router.get("/carts", response_model=List[Cart])
 def get_my_carts(auth_token: str = Header(min_length=1, max_length=50), db: Session = Depends(get_db)):
     user = read_token(auth_token, db)
     return crud.read(models.Cart, [["owner_id", user.id]], db)

@@ -5,6 +5,7 @@ from routers import carts
 from routers import commands
 from routers import users
 from sql_app import crud
+from typing import List
 
 from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.orm import Session
@@ -50,7 +51,7 @@ def create_seller_product(
     return crud.create_product(db=db, product=product, seller_id=seller_id)
 
 
-@app.get("/products/", response_model=list[Product])
+@app.get("/products/", response_model=List[Product])
 def read_product(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     products = crud.get_products(db, skip=skip, limit=limit)
     return products
@@ -74,7 +75,7 @@ def create_comment_for_user(
     return crud.create_comment(db, comment, user_id, product_id)
 
 
-@app.get("/comments", response_model=list[Comment])
+@app.get("/comments", response_model=List[Comment])
 def read_comments(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     comments = crud.get_comments(db, skip=skip, limit=limit)
     return comments
